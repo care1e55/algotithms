@@ -3,7 +3,7 @@ def next_permutation(string):
         if string[i] < string[i+1]:
             pos = i + 1
             for j in range(i+1, len(string)):
-                if (string[j] > string[i]) and (string[j] < string[pos]):
+                if (string[j] > string[i]) and (string[j] <= string[pos]):
                     pos = j
             string[i], string[pos] = string[pos], string[i]
             string[i+1:] = string[:i:-1]
