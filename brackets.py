@@ -1,53 +1,37 @@
+from collections import deque
+
 open_brackets = ['[', '(']
-brackets = ['[', ']', '(', ')']
+brackets = ['[', '(', ']', ')']
 
-def checkstr(test_string):
-    stack = []
-    for i, char in enumerate(test_string):
-        if char in brackets:
-            if char in open_brackets:
-                stack.append((i, char))
-                continue
-            if not stack:
-                return False
-            top = stack.pop(-1)
-            if ((top[1] == '[' and char != ']') or
-                    (top[1] == '(' and char != ')')):
-                return False
-    if stack:
-        return False
-    else:
-        return True
-    return True
-
-def small_checkstr(test_string):
-    stack = []
-    for i, char in enumerate(test_string):
-        if char in open_brackets:
-            stack.append((i, char))
-            continue
-        if not stack:
-            return False
-        top = stack.pop(-1)
-        if ((top[1] == '[' and char != ']') or
-                (top[1] == '(' and char != ')')):
-            return False
-    return True
-
-def gen(pos, N, a):
+def gen(pos, a, stack):
     if (pos == N):
-        result = "".join(a)
-        if checkstr(result):
-            # print(result)
-            stack = []
+        if not stack:
+            # pass
+            print("".join(a))
         return
     for i in brackets:
-        a.append(i)
-        if not small_checkstr(a):
-            a.pop()
+        if i in open_brackets:
+            if len(stack) >= n2:
+                continue
+            a.append(i)
+            stack.append(i)
+        elif not stack:
             continue
-        gen(pos+1, N, a)
+        elif ((stack[-1] == '[' and i != ']') or
+              (stack[-1] == '(' and i != ')')):
+              continue
+        else:
+            a.append(i)
+            top = stack.pop()
+        gen(pos+1, a, stack)
+        if i in open_brackets:
+            stack.pop()
+        else:
+            stack.append(top)
         a.pop()
 
-arr = []
-gen(0, int(input()), arr)
+N = int(input())
+n2 = N//2
+arr = deque()
+stack = deque()
+gen(0, arr, stack)
